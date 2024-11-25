@@ -115,6 +115,8 @@ export function isValid3pidInvite(event) {
 function _inviteToChat(invitedUserId) {
     const selectedRoom = _selectDirectChat(invitedUserId);
     const roomStatus = selectedRoom ? selectedRoom.status : null;
+    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+    const matrixClient = MatrixClientPeg.get();
 
     switch (roomStatus) {
         case "join-join":
@@ -150,7 +152,7 @@ function _inviteToChat(invitedUserId) {
 
         case "join-leave":
             // Send an invitation then redirect to the existing room.
-            _inviteToRoom(selectedRoom.room.roomId, addrText);
+            _inviteToRoom(selectedRoom.room.roomId, invitedUserId);
             dis.dispatch({
                 action: 'view_room',
                 room_id: selectedRoom.room.roomId,
